@@ -74,3 +74,8 @@ Thumbs.db
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Sensitive environment credentials
+src/environments/environment.ts
+src/environments/environment.prod.ts
+

@@ -1,0 +1,52 @@
+ion-content {
+  --background: #121212;
+}
+
+ion-toolbar {
+  --background: #1c1c1e;
+  --color: #ffffff;
+}
+
+ion-searchbar {
+  --background: #1c1c1e;
+  --color: #ffffff;
+  --placeholder-color: #8e8e93;
+  --icon-color: #8e8e93;
+  --clear-button-color: #8e8e93;
+  padding: 0 16px;
+}
+
+ion-card {
+  --background: #1c1c1e;
+  --color: #c8c8c8;
+  border-radius: 12px;
+}
+
+ion-card-title,
+ion-card-subtitle {
+  --color: #ffffff;
+}
+
+/* Category pills container */
+ion-segment {
+  margin: 8px 16px 14px 16px;
+  padding: 4px;
+  background: #1c1c1e;
+  border-radius: 12px;
+  min-height: 40px;
+  --indicator-color: transparent;
+
+  ion-segment-button {
+    --color: #8e8e93;
+    --color-checked: #ffffff;
+    min-height: 32px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+
+    &.segment-button-checked {
+      background: #2c2c2e;
+      color: #ffffff;
+      font-weight: 600;
+    }
+  }
+}

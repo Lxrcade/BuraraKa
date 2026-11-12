@@ -1,15 +1,85 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Tab 2 </ion-title>
+    <ion-title>May Nahanap</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <!-- 1. The Photo Box (Mobile Camera Feature) -->
+  <ion-card (click)="takePhoto()" class="photo-card">
+    @if (photoUrl) {
+    <img [src]="photoUrl" alt="Item Preview" class="preview-img" />
+    } @else {
+    <div class="photo-placeholder">
+      <ion-icon name="camera-outline" size="large"></ion-icon>
+      <p>Tap to take a photo of the item</p>
+    </div>
+    }
+  </ion-card>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <!-- 2. The Form Fields -->
+  <ion-card>
+    <ion-card-content>
+      <!-- Item Name -->
+      <ion-item lines="full">
+        <ion-input label="Item Name" labelPlacement="floating" placeholder="e.g. Pink AquaFlask Tumbler"
+          [(ngModel)]="newItem.title">
+        </ion-input>
+      </ion-item>
+
+      <!-- Category Picker -->
+      <ion-item lines="full">
+        <ion-select label="Category" labelPlacement="floating" [(ngModel)]="newItem.category">
+          <ion-select-option value="tumbler">Tumblers</ion-select-option>
+          <ion-select-option value="id">IDs</ion-select-option>
+          <ion-select-option value="keys">Keys</ion-select-option>
+          <ion-select-option value="electronics">Electronics</ion-select-option>
+          <ion-select-option value="books">Books</ion-select-option>
+          <ion-select-option value="others">Others</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- Location Found -->
+      <ion-item lines="full">
+        <ion-input label="Where was it found?" labelPlacement="floating" placeholder="e.g. Library 2nd Floor, Table 4"
+          [(ngModel)]="newItem.location">
+        </ion-input>
+      </ion-item>
+
+      <!-- Finder Name -->
+      <ion-item lines="full">
+        <ion-input label="Your Name (Finder)" labelPlacement="floating" placeholder="e.g. Juan D."
+          [(ngModel)]="newItem.finder_name">
+        </ion-input>
+      </ion-item>
+
+      <!-- Custody Choice: Surrendered or With Finder -->
+      <ion-item lines="none" class="ion-margin-top">
+        <ion-label>Where is the item right now?</ion-label>
+      </ion-item>
+      <ion-radio-group [(ngModel)]="newItem.custody">
+        <ion-item lines="none">
+          <ion-radio value="surrendered" justify="space-between"> Surrendered to Building / Office </ion-radio>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-radio value="with_finder" justify="space-between"> I am keeping it with me </ion-radio>
+        </ion-item>
+      </ion-radio-group>
+
+      <!-- Dynamic Details Box -->
+      <ion-item lines="full">
+        <ion-input color="medium"
+          [label]="newItem.custody === 'surrendered' ? 'Which office/desk was it left at?' : 'Your Contact (Phone or Social)'"
+          labelPlacement="floating"
+          [placeholder]="newItem.custody === 'surrendered' ? 'e.g. CCS Dean\'s Office, 2nd Floor' : 'e.g. 0917-xxx-xxxx or @instagram'"
+          [(ngModel)]="newItem.description">
+        </ion-input>
+      </ion-item>
+
+      <!-- 3. The Submit Button (POST) -->
+      <ion-button expand="block" color="primary" class="ion-margin-top" (click)="submitReport()">
+        Post Found Item
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

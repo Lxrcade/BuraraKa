@@ -1,15 +1,108 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Tab 1 </ion-title>
+    <ion-title>Mga Nahanap</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <!-- 1. Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingText="Pull down to refresh..." refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="large">Feed</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <!-- 2. Fast Reactive Search Bar -->
+  <ion-searchbar mode="ios" placeholder="Search item, location, finder..." [value]="searchTerm"
+    (ionInput)="onSearchInput($event)" (ionClear)="onSearchClear()"></ion-searchbar>
+
+  <!-- 3. Category Selector -->
+  <ion-segment mode="ios" [scrollable]="true" [(ngModel)]="selectedCategory" (ionChange)="filterItems()">
+    <ion-segment-button value="all">
+      <ion-label>All</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="id">
+      <ion-label>IDs</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="tumbler">
+      <ion-label>Tumblers</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="keys">
+      <ion-label>Keys</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="electronics">
+      <ion-label>Electronics</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="books">
+      <ion-label>Books</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="others">
+      <ion-label>Others</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- 4. Accurate Empty / Loading Message -->
+  @if (filteredItems.length === 0) {
+  <div style="text-align: center; padding: 40px 20px; color: #8e8e93;">
+    <p style="font-size: 1rem;">{{ statusMessage }}</p>
+  </div>
+  }
+
+  <!-- 5. Full-Information Feed Cards -->
+  @for (item of filteredItems; track item.id) {
+  <ion-card>
+    @if (item.photo_url) {
+    <img [src]="item.photo_url" alt="{{ item.title }}" style="max-height: 250px; width: 100%; object-fit: cover;" />
+    }
+    <ion-card-header>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <ion-card-subtitle style="margin: 0; text-transform: uppercase; font-weight: 600; color: #3880ff;">
+          {{ item.category }}
+        </ion-card-subtitle>
+
+        <!-- Custody Badge -->
+        @if (item.custody === 'surrendered') {
+        <ion-badge color="success">Surrendered to Office</ion-badge>
+        } @else {
+        <ion-badge color="warning">With Finder</ion-badge>
+        }
+      </div>
+
+      <ion-card-title>{{ item.title }}</ion-card-title>
+      <ion-card-subtitle style="color: #a0a0a0; margin-top: 4px;">
+        📍 Found at: {{ item.location }}
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <!-- Distinct claim details depending on custody status -->
+      @if (item.custody === 'surrendered') {
+      <p style="color: #ffffff; font-size: 0.95rem; margin-bottom: 6px;">
+        🏢 <strong>Claim at:</strong> {{ item.description }}
+      </p>
+      } @else {
+      <p style="color: #ffffff; font-size: 0.95rem; margin-bottom: 6px;">
+        📞 <strong>Contact to Claim:</strong> {{ item.description }}
+      </p>
+      }
+
+      @if (item.finder_name) {
+      <p style="font-size: 0.85rem; color: #8e8e93; margin-top: 6px;">
+        👤 Reported by: <strong>{{ item.finder_name }}</strong>
+      </p>
+      }
+
+      @if (item.created_at) {
+      <p style="font-size: 0.75rem; color: #636366; margin-top: 4px;">
+        🕒 Posted on: {{ item.created_at | date:'mediumDate' }}
+      </p>
+      }
+    </ion-card-content>
+  </ion-card>
+  }
 </ion-content>
